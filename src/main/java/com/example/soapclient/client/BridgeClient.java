@@ -6,6 +6,11 @@ import com.example.soapclient.ws.UbicaPlusWSService;
 import org.springframework.stereotype.Component;
 
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.Handler;
+import javax.xml.ws.handler.HandlerResolver;
+import javax.xml.ws.handler.PortInfo;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -25,6 +30,12 @@ public class BridgeClient {
         request.setMotivoConsulta(motivo);
 
         UbicaPlusWSService ws = new UbicaPlusWSService();
+        ws.setHandlerResolver(portInfo -> {
+            List<Handler> handlerList = new ArrayList<>();
+            handlerList.add(new SoapHandler());
+            return handlerList;
+        });
+
         UbicaPlusWS iws = ws.getUbicaPlus();
 
         // Add username and password for Basic Authentication
