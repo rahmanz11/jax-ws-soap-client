@@ -1,6 +1,9 @@
 package com.example.soapclient.client;
 
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
@@ -40,10 +43,10 @@ public class SoapHandler implements SOAPHandler<SOAPMessageContext> {
                 tokenElem.addChildElement(userElem);
                 tokenElem.addChildElement(pwdElem);
                 securityElem.addChildElement(tokenElem);
-                if (envelope.getHeader() != null) {
-                    envelope.getHeader().detachNode();
+                SOAPHeader header = envelope.getHeader();
+                if (header == null) {
+                    header = envelope.addHeader();
                 }
-                SOAPHeader header = envelope.addHeader();
                 header.addChildElement(securityElem);
 
             } catch (Exception e) {
